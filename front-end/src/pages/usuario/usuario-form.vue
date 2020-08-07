@@ -50,11 +50,21 @@
 					</b-form-group>
 
 					<b-form-group id="ddlPerfil" label=" Perfil: ">
-						<b-form-select v-model="selected" :options="perfis"></b-form-select>
+						<b-form-select
+							v-model="form.id_perfilUsuario"
+							value-field="id_PerfilUsuario"
+							text-field="nome"
+							:options="perfisUsuario"
+						></b-form-select>
 					</b-form-group>
 
 					<b-form-group id="ddlEmpresa" label=" Empresa: ">
-						<b-form-select v-model="selected" :options="empresas"></b-form-select>
+						<b-form-select
+							v-model="form.id_empresa"
+							value-field="id_Empresa"
+							text-field="razaoSocial"
+							:options="empresas"
+						></b-form-select>
 					</b-form-group>
 
 					<b-container class="text-center">
@@ -72,6 +82,7 @@
 
 <script>
 import Nav from "../../components/_nav/Nav";
+import { mapActions } from "vuex";
 
 export default {
 	components: {
@@ -83,46 +94,64 @@ export default {
 				nome: "",
 				sobrenome: "",
 				email: "",
-				senha: ""
+				senha: "",
+				id_empresa: 0,
+				id_perfilUsuario: 0
 			},
+			empresas: [],
+			perfisUsuario: [],
 			selected: null,
-			perfis: [
-				{ value: null, text: "-Selecione Perfil-" },
-				{ value: 1, text: "Admin" },
-				{ value: 2, text: "Técnico" },
-				{ value: 3, text: "Operador" }
-			],
-			empresas: [
-				{ value: null, text: "-Selecione Empresa-" },
-				{ value: 1, text: "Empresa 1" },
-				{ value: 2, text: "Empresa 2" },
-				{ value: 3, text: "Empresa 3" }
-			],
 			show: true
 		};
 	},
 	methods: {
-		onSubmit() {
-			let _usuario = {
-				nome: this.form.nome,
-				sobrenome: this.form.sobrenome,
-				email: this.form.email,
-				senha: this.form.senha,
-				id_perfilUsuario: 1,
-				id_empresa: 1
-			};
-			this.$http
-				.post("http://localhost:8000/api/usuario", _usuario)
-				.then(res => res.json())
-				.then(usuarioRetornado => {
-					this.form = "";
-				});
+		...mapActions("usuario", [
+			"ActionGetAllEmpresasDDL",
+			"ActionGetAllPerfisUsuarioDDL",
+			"ActionCreateUsuario"
+		]),
+
+		async onSubmit() {
+			try {
+				let _usuario = {
+					nome: this.form.nome,
+					sobrenome: this.form.sobrenome,
+					email: this.form.email,
+					senha: this.form.senha,
+					id_perfilUsuario: this.form.id_perfilUsuario,
+					id_empresa: this.form.id_empresa
+				};
+				await this.ActionCreateUsuario(_usuario);
+				alert("Usuario criado com sucesso");
+			} catch (err) {
+				window.alert("Ocorreu algum erro");
+				console.error(err);
+			}
 		}
+	},
+	mounted() {
+		this.ActionGetAllEmpresasDDL().then(res => {
+			this.empresas = this.empresas.concat({
+				razaoSocial: "--Selecione Empresa--",
+				id_Empresa: 0
+			});
+			this.empresas = this.empresas.concat(res.data);
+		});
+		this.ActionGetAllPerfisUsuarioDDL().then(res => {
+			this.perfisUsuario = this.perfisUsuario.concat({
+				nome: "--Selecione Perfil--",
+				id_PerfilUsuario: 0,
+				usuarios: null
+			});
+			this.perfisUsuario = this.perfisUsuario.concat(res.data);
+
+			console.log(this.perfisUsuario);
+		});
 	}
 };
 </script>
 
-<style>
+<style lang='scss'>
 .titulo {
 	margin: auto;
 	width: 25%;

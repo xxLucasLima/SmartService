@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using back_end.Models;
 
@@ -13,6 +14,8 @@ namespace back_end.Data
 
         //USUÁRIO
         Task<Usuario[]> GetAllUsuariosAsync();
+        Task<Empresa[]> GetAllEmpresasDDL();
+        Task<PerfilUsuario[]> GetAllPerfisUsuarioDDL();
         Task<Usuario> GetUsuarioAsyncById(int usuarioId);
         Task<Usuario> GetUsuarioAsyncByEmailAndPassword(string emailUsuario, string senhaUsuario);
     }

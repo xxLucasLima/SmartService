@@ -1,7 +1,7 @@
 <template>
   <div class="m">
     <b-navbar toggleable="lg" type="dark" variant="dark" id="navBar">
-      <b-navbar-brand href="#">SmartTech</b-navbar-brand>
+      <b-navbar-brand id="smartServiceBrand" href="#">SmartTech</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -67,13 +67,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
 #buttonUser {
   font-size: 11pt;
   border-radius: 50%;
-  width: 85px;
-  height: 85px;
-  border-color: white;
+  width: 82px;
+  height: 82px;
+  border-color: coral;
 
   border-style: solid;
   border-width: 3px;
@@ -84,8 +84,11 @@ export default {
   margin-top: 5px
 }
 
+#smartServiceBrand{
+  color:  coral;
+}
+
 #navBar {
-  padding: 10px;
   padding-left: 20px;
   padding-right: 20px;
 

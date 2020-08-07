@@ -47,13 +47,13 @@ namespace back_end.Controllers
         {
             var identity = User.Identity as ClaimsIdentity;
 
-            if (identity != null)
+            if (identity.IsAuthenticated)
             {
                 Usuario user = new Usuario();
                 user.PerfilUsuario = new PerfilUsuario();
                 IEnumerable<Claim> claims = identity.Claims;
                 var email = claims.Where(p => p.Type.Contains("name")).FirstOrDefault()?.Value;
-                var token =  Request.Headers.GetCommaSeparatedValues("Authorization")[0].Split(" ")[1];
+                var token = Request.Headers.GetCommaSeparatedValues("Authorization")[0].Split(" ")[1];
                 var nome = claims.Where(p => p.Type.Contains("nameidentifier")).FirstOrDefault()?.Value;
                 var role = claims.Where(p => p.Type.Contains("role")).FirstOrDefault()?.Value;
 
@@ -67,8 +67,11 @@ namespace back_end.Controllers
                 };
 
             }
-            return null;
-        }
+            else
+            {
+                return new NotFoundObjectResult(new { message = "Sua sessão é inválida ou está expirada" });
 
+            }
+        }
     }
 }

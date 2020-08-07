@@ -33,7 +33,7 @@ namespace back_end.Data
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        //ALUNOS
+        //USUARIOS
         public async Task<Usuario[]> GetAllUsuariosAsync()
         {
             IQueryable<Usuario> query = _context.Usuario;
@@ -65,9 +65,27 @@ namespace back_end.Data
             query = query.Include(p => p.Empresa);
             query = query.Include(p => p.PerfilUsuario);
 
-            query = query.AsNoTracking().OrderBy(a => a.Id_Usuario).Where(aluno => aluno.Email == emailUsuario && aluno.Senha == senhaUsuario);
+            query = query.AsNoTracking().OrderBy(a => a.Id_Usuario).Where(usuario => usuario.Email == emailUsuario && usuario.Senha == senhaUsuario);
 
             return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Empresa[]> GetAllEmpresasDDL()
+        {
+            IQueryable<Empresa> query = _context.Empresa;
+
+            query = query.AsNoTracking().OrderBy(a => a.razaoSocial);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<PerfilUsuario[]> GetAllPerfisUsuarioDDL()
+        {
+            IQueryable<PerfilUsuario> query = _context.PerfilUsuario;
+
+            query = query.AsNoTracking().OrderBy(a => a.Nome);
+
+            return await query.ToArrayAsync();
         }
 
     }

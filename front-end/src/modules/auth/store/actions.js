@@ -31,7 +31,6 @@ export const ActionLoadSession = ({ dispatch }) => {
         try {
             const { data: { usuario } } = await services.auth.loadSession()
             dispatch('ActionSetUsuario', usuario);
-            alert("resolved")
             resolve()
         } catch (err) {
             dispatch('ActionSignOut');

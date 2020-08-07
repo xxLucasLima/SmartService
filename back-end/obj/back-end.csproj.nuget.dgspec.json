@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\BACK-END\\back-end.csproj": {}
+    "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\back-end\\back-end.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\BACK-END\\back-end.csproj": {
+    "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\back-end\\back-end.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\BACK-END\\back-end.csproj",
+        "projectUniqueName": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\back-end\\back-end.csproj",
         "projectName": "back-end",
-        "projectPath": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\BACK-END\\back-end.csproj",
+        "projectPath": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\back-end\\back-end.csproj",
         "packagesPath": "C:\\Users\\Lucas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\BACK-END\\obj\\",
+        "outputPath": "C:\\Users\\Lucas\\Desktop\\Elias\\ProjetoEliasDev\\back-end\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

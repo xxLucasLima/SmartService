@@ -3,17 +3,17 @@ import store from '../store'
 export default async (to, from, next) => {
   document.title = `${to.name} - SmartService`
 
-  if (to.name !== 'Login' && !store.getters['auth/hasToken']) {
+  if (to.name !== 'login' && !store.getters['auth/hasToken']) {
     try {
       await store.dispatch('auth/ActionCheckToken')
 
       next({ path: to.path })
     } catch (err) {
-      next({ name: 'Login' })
+      next({ name: 'login' })
     }
   } else {
-    if (to.name === 'Login' && store.getters['auth/hasToken']) {
-      next({ name: 'Usuarios' })
+    if (to.name === 'login' && store.getters['auth/hasToken']) {
+      next({ name: 'usuarios' })
     } else {
       next()
     }

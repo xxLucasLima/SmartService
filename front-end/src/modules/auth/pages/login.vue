@@ -66,7 +66,7 @@ export default {
 
                 await this.ActionLogin(_usuario);
                 
-                this.$router.push({name: 'Usuarios'})
+                this.$router.push({name: 'usuarios'})
 			} catch (err) {
                 alert(err.data ? err.data.message: 'Não foi possível fazer login')
             }
@@ -75,7 +75,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
 .divLogin {
 	margin: auto;
 	width: 25%;

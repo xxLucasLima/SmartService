@@ -1,1 +1,2 @@
 export const CREATE_USUARIO= 'CREATE_USUARIO';
+export const GET_USUARIOS= 'GET_USUARIOS';
