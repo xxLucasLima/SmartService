@@ -39,6 +39,14 @@
 				</b-container>
 			</b-card>
 		</b-card-group>
+		<br />
+		<b-alert
+			:show="dismissCountDown"
+			dismissible
+			variant="danger"
+			@dismissed="dismissCountDown=0"
+			@dismiss-count-down="countDownChanged"
+		>Erro ao acessar. Favor verificar login e senha.</b-alert>
 	</div>
 </template>
 
@@ -51,11 +59,19 @@ export default {
 			usuario: {
 				email: "",
 				senha: ""
-			}
+			},
+			dismissSecs: 5,
+			dismissCountDown: 0
 		};
 	},
 
 	methods: {
+		countDownChanged(dismissCountDown) {
+			this.dismissCountDown = dismissCountDown;
+		},
+		showAlert() {
+			this.dismissCountDown = this.dismissSecs;
+		},
 		...mapActions("auth", ["ActionLogin"]),
 		async onSubmit() {
 			try {
@@ -64,12 +80,13 @@ export default {
 					senha: this.usuario.senha
 				};
 
-                await this.ActionLogin(_usuario);
-                
-                this.$router.push({name: 'usuarios'})
-			} catch (err) {
-                alert(err.data ? err.data.message: 'Não foi possível fazer login')
-            }
+				await this.ActionLogin(_usuario);
+
+				this.$router.push({ name: "usuarios" });
+			} catch (err) 
+			{
+				this.showAlert();
+			}
 		}
 	}
 };
