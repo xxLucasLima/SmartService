@@ -59,12 +59,28 @@ namespace back_end.Controllers
             }
         }
 
-        [HttpDelete("{Id_Usuario}")]
-        public async Task<IActionResult> Delete(int Id_Usuario)
+        [HttpGet("{idUsuario}")]
+        public async Task<IActionResult> GetUsuarioAsyncById(int idUsuario)
         {
             try
             {
-                var usuario = await _repo.GetUsuarioAsyncById(Id_Usuario);
+                var result = await _repo.GetUsuarioAsyncById(idUsuario);
+
+                return Ok(result);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
+            }
+        }
+
+
+        [HttpDelete("{idUsuario}")]
+        public async Task<IActionResult> Delete(int idUsuario)
+        {
+            try
+            {
+                var usuario = await _repo.GetUsuarioAsyncById(idUsuario);
 
                 if (usuario == null)
                     return NotFound();
@@ -82,21 +98,6 @@ namespace back_end.Controllers
             }
             return BadRequest();
 
-        }
-
-        [HttpGet("{Id_Usuario}")]
-        public async Task<IActionResult> GetUsuarioAsyncById(int alunoId)
-        {
-            try
-            {
-                var result = await _repo.GetUsuarioAsyncById(alunoId);
-
-                return Ok(result);
-            }
-            catch (System.Exception)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
-            }
         }
 
         [HttpGet("getAllEmpresasDDL/")]
@@ -154,6 +155,33 @@ namespace back_end.Controllers
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
             }
+        }
+
+        [HttpPut("{idUsuario}")]
+        public async Task<IActionResult> Put(int idUsuario, Usuario payload)
+        {
+            try
+            {
+                var usuario = await _repo.GetUsuarioAsyncById(idUsuario);
+
+                if (usuario == null)
+                    return NotFound();
+
+                _repo.Update(payload);
+
+                if (await _repo.SaveChangesAsync())
+                {
+                    usuario = await _repo.GetUsuarioAsyncById(idUsuario);
+                    return Created($"/api/usuario/{payload.Id_Usuario}", usuario);
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou: " + ex.Message);
+            }
+            return BadRequest();
+
         }
 
     }

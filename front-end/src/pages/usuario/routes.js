@@ -9,7 +9,7 @@ export default [
         component: Usuarios
     },
     {
-        path: '/usuario-form',
+        path: '/usuario-form/:id_Usuario?',
         name: 'usuario-form',
         component: UsuarioForm
     }

@@ -12,12 +12,16 @@
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "jquery": "^3.5.1",
     "material-design-icons": "^3.0.1",
     "portal-vue": "^2.1.7",
+    "vee-validate": "^3.3.8",
     "vue": "^2.6.11",
+    "vue-cryptojs": "^2.1.5",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.3.4",
+    "vuelidate": "^0.7.5",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

@@ -12,7 +12,7 @@
 					<b-card-text style="font-size: 20pt; padding-bottom: 20px">SmartService</b-card-text>
 				</strong>
 				<b-container>
-					<b-form @submit="onSubmit">
+					<b-form @submit.stop.prevent="onSubmit">
 						<b-form-group id="input-group-1">
 							<b-form-input
 								id="input-1"
@@ -33,7 +33,10 @@
 							></b-form-input>
 						</b-form-group>
 						<b-container class="text-center">
-							<b-button type="submit" variant="info">Enviar</b-button>
+							<b-button type="submit" variant="info">
+								<i class="material-icons md-18">send</i>
+								Entrar
+							</b-button>
 						</b-container>
 					</b-form>
 				</b-container>
@@ -52,6 +55,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { encryptText, decryptText } from "@/helpers/encrypt/encryptService";
 
 export default {
 	data() {
@@ -77,14 +81,12 @@ export default {
 			try {
 				let _usuario = {
 					email: this.usuario.email,
-					senha: this.usuario.senha
+					senha: encryptText(this.usuario.senha)
 				};
-
 				await this.ActionLogin(_usuario);
 
 				this.$router.push({ name: "usuarios" });
-			} catch (err) 
-			{
+			} catch (err) {
 				this.showAlert();
 			}
 		}

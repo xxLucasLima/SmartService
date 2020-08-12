@@ -37,7 +37,7 @@
 						empty-text="Não foi possível localizar registros de Usuários"
 						empty-filtered-text="Não foi possível localizar Email de Usuários baseado na informação descrita"
 						primary-key="email"
-						:busy="false"
+						:busy="busy"
 						:head-variant="'dark'"
 						:items="usuarios"
 						:fields="fields"
@@ -71,7 +71,14 @@
 								>
 									<i class="material-icons md-24">delete</i>
 								</b-button>
-								<b-button pill size="sm" class="mr-2 buttonEditar" v-b-tooltip.hover title="Editar Usuário">
+								<b-button
+									pill
+									size="sm"
+									class="mr-2 buttonEditar"
+									v-b-tooltip.hover
+									title="Editar Usuário"
+									@click.prevent="editarUsuario(row.item.id_Usuario)"
+								>
 									<i class="material-icons md-24">edit</i>
 								</b-button>
 								<b-button
@@ -111,6 +118,7 @@ export default {
 	data() {
 		return {
 			filter: null,
+			busy: true,
 			infoModal: {
 				id: "info-modal",
 				title: "",
@@ -165,8 +173,15 @@ export default {
 		async excluirUsuario(id_Usuario) {
 			try {
 				await this.ActionDeleteUsuarioById(id_Usuario);
-				alert("Refresh reached successfuly");
 				this.ActionGetAllUsuarios();
+			} catch (err) {
+				window.alert("Ocorreu algum erro");
+				console.error(err);
+			}
+		},
+		editarUsuario(id_Usuario) {
+			try {
+				this.$router.push( "usuario-form/" + id_Usuario );
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
@@ -184,7 +199,9 @@ export default {
 		}
 	},
 	mounted() {
-		this.ActionGetAllUsuarios();
+		this.ActionGetAllUsuarios().then(() =>{
+			this.busy = false;
+		});
 	},
 	computed: {
 		...mapState("usuario", ["usuarios"])
