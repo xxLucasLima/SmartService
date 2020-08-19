@@ -7,9 +7,18 @@ namespace back_end.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
+        #region DbSets
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<PerfilUsuario> PerfilUsuario { get; set; }
         public DbSet<Empresa> Empresa { get; set; }
+
+        public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Lote> Lote { get; set; }
+        public DbSet<Produto> Produto { get; set; }
+        public DbSet<DefeitoProduto> DefeitoProduto { get; set; }
+        #endregion
+
+        #region OnModelCreating
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +34,45 @@ namespace back_end.Data
                     .HasName("PK_empresa");
 
             });
+            modelBuilder.Entity<Cliente>(entity =>
+            {
+                entity.HasKey(e => e.Id_Cliente)
+                    .HasName("PK_cliente");
+
+            });
+            modelBuilder.Entity<Lote>(entity =>
+            {
+                entity.HasKey(e => e.Id_Lote)
+                    .HasName("PK_lote");
+
+            });
+            modelBuilder.Entity<DefeitoProduto>(entity =>
+            {
+                entity.HasKey(e => e.Id_DefeitoProduto)
+                    .HasName("PK_defeitoproduto");
+
+            });
+            modelBuilder.Entity<Produto>(entity =>
+            {
+                entity.HasKey(e => e.Id_Produto)
+                    .HasName("PK_produto");
+
+                entity.HasOne(d => d.Lote)
+                    .WithMany(p => p.Produtos)
+                    .HasForeignKey(d => d.Id_Lote)
+                    .HasConstraintName("FK_produto_lote");
+
+                entity.HasOne(d => d.Cliente)
+                    .WithMany(p => p.Produtos)
+                    .HasForeignKey(d => d.Id_Cliente)
+                    .HasConstraintName("FK_produto_cliente");
+
+                entity.HasOne(d => d.DefeitoProduto)
+                    .WithMany(p => p.Produtos)
+                    .HasForeignKey(d => d.Id_DefeitoProduto)
+                    .HasConstraintName("FK_produto_defeitoproduto");
+            });
+
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.Id_Usuario)
@@ -43,5 +91,7 @@ namespace back_end.Data
                     .HasConstraintName("FK_usuario_perfilUsuario");
             });
         }
+
+        #endregion
     }
 }

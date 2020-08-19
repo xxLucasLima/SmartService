@@ -1,16 +1,15 @@
 <template>
-	<div class="usuarios">
+	<div class="produtos">
 		<Nav />
-
 		<div class="divForm">
 			<b-container>
 				<div class="titulo">
-					<label>Usuários</label>
+					<label>Produtos</label>
 				</div>
 				<br />
 				<b-row class="justify-content-md-center">
 					<b-col sm="4" md="auto">
-						<label>Pesquise pelo e-mail:</label>
+						<label>Pesquise pelo tipo:</label>
 					</b-col>
 					<b-col sm="5">
 						<b-form-input
@@ -32,18 +31,18 @@
 				<br />
 				<div>
 					<b-table
-						id="tableUsuarios"
+						id="tableProdutos"
 						striped
-						empty-text="Não foi possível localizar registros de Usuários"
-						empty-filtered-text="Não foi possível localizar Email de Usuários baseado na informação descrita"
-						primary-key="email"
+						empty-text="Não foi possível localizar registros de Produtos"
+						empty-filtered-text="Não foi possível localizar Tipo de Produtos baseado na informação descrita"
+						primary-key="tipo"
 						:busy="busy"
 						:head-variant="'dark'"
-						:items="usuarios"
+						:items="produtos"
 						:fields="fields"
 						:tbody-transition-props="transProps"
 						:filter="filter"
-						:filterIncludedFields="['email']"
+						:filterIncludedFields="['tipo']"
 						show-empty
 					>
 						<template v-slot:empty="scope">
@@ -66,8 +65,8 @@
 									size="sm"
 									class="mr-2 buttonExluir"
 									v-b-tooltip.hover
-									title="Excluir Usuário"
-									@click.prevent="showConfirmMsg('Usuário', bvModal, excluirUsuario, row.item.id_Usuario)"
+									title="Excluir Produto"
+									@click.prevent="showConfirmMsg('Produto', bvModal, excluirProduto, row.item.id_Produto)"
 								>
 									<i class="material-icons md-24">delete</i>
 								</b-button>
@@ -76,8 +75,8 @@
 									size="sm"
 									class="mr-2 buttonEditar"
 									v-b-tooltip.hover
-									title="Editar Usuário"
-									@click.prevent="editarUsuario(row.item.id_Usuario)"
+									title="Editar Produto"
+									@click.prevent="editarUsuario(row.item.id_Produto)"
 								>
 									<i class="material-icons md-24">edit</i>
 								</b-button>
@@ -86,15 +85,13 @@
 									size="sm"
 									class="mr-2 buttonPadrao"
 									v-b-tooltip.hover
-									title="Detalhes do usuário"
+									title="Detalhes do Produto"
 									@click="info(row.item, row.index, $event.target)"
 								>
 									<i class="material-icons md-24">menu</i>
 								</b-button>
 							</div>
 						</template>
-
-						<template v-slot:cell(nome)="data">{{ data.item.nome }} {{ data.item.sobrenome }}</template>
 					</b-table>
 				</div>
 				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
@@ -104,6 +101,7 @@
 		</div>
 	</div>
 </template>
+
 
 <script>
 import Nav from "../../components/_nav/Nav";
@@ -126,36 +124,36 @@ export default {
 				id: "info-modal",
 				title: "",
 				content: "",
-				usuario: {}
+				produto: {}
 			},
 			transProps: {
 				name: "flip-list"
 			},
 			fields: [
 				{
-					key: "email",
-					label: "E-mail",
+					key: "tipo",
+					label: "Tipo",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
-					key: "nome",
-					label: "Nome",
+					key: "observacao",
+					label: "Observação",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
-					key: "empresa.nomeFantasia",
-					label: "Empresa Associada",
+					key: "descricao",
+					label: "Descrição",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
-					key: "perfilUsuario.nome",
-					label: "Perfil de Acesso",
+					key: "cliente.nomeFantasia",
+					label: "Cliente",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
@@ -169,22 +167,22 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions("usuario", [
-			"ActionGetAllUsuarios",
-			"ActionDeleteUsuarioById"
+		...mapActions("produto", [
+			"ActionGetAllProdutos",
+			"ActionDeleteProdutoById"
 		]),
-		async excluirUsuario(id_Usuario) {
+		async excluirProduto(id_Produto) {
 			try {
-				await this.ActionDeleteUsuarioById(id_Usuario);
-				this.ActionGetAllUsuarios();
+				await this.ActionDeleteProdutoById(id_Produto);
+				this.ActionGetAllProdutos();
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
 			}
 		},
-		editarUsuario(id_Usuario) {
+		editarUsuario(id_Produto) {
 			try {
-				this.$router.push("usuario-form/" + id_Usuario);
+				this.$router.push("produto-form/" + id_Produto);
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
@@ -202,17 +200,17 @@ export default {
 		}
 	},
 	mounted() {
-		this.ActionGetAllUsuarios().then(() => {
+		this.ActionGetAllProdutos().then(() => {
 			this.busy = false;
 		});
 	},
 	computed: {
-		...mapState("usuario", ["usuarios"])
+		...mapState("produto", ["produtos"])
 	}
 };
 </script>
 
-<style  lang='scss' >
+<style>
 	.flip-list-move {
 		transition: transform 1s;
 	}
@@ -221,7 +219,7 @@ export default {
 		min-width: 180px;
 		text-align: center;
 	}
-	#tableUsuarios {
-		margin-left: -180px;
+	#tableProdutos {
+		margin-left: -110px;
 	}
 </style>

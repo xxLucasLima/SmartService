@@ -11,6 +11,12 @@ namespace back_end.Models
         public DateTime DataCriacao { get; set; }
         public string NomeFantasia { get; set; }
         public string razaoSocial { get; set; }
-        public ICollection<Usuario> Usuarios {get;set;}
+        public ICollection<Usuario> Usuarios { get; set; }
+    }
+
+    public class EmpresaDDL
+    {
+        public long Value { get; set; }
+        public string Text { get; set; }
     }
 }

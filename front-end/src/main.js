@@ -7,15 +7,14 @@ import './assets/scss/app.scss'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { ModalPlugin } from 'bootstrap-vue'
+
 import VueCryptojs from 'vue-cryptojs'
 
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(ModalPlugin)
-
 Vue.use(VueCryptojs)
-
 Vue.config.productionTip = false
 
 window._Vue = new Vue({

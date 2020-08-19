@@ -7,12 +7,7 @@
 					<label>Usuário</label>
 				</div>
 				<b-form @submit.stop.prevent="onSubmit" v-if="show">
-					<b-form-group
-						id="nomeGroup"
-						label="Nome:"
-						label-for="nome"
-						:class="{ 'form-group--error': $v.form.nome.$error }"
-					>
+					<b-form-group id="nomeGroup" label="Nome:" label-for="nome">
 						<b-form-input
 							id="nome"
 							v-model="$v.form.nome.$model"
@@ -91,8 +86,6 @@
 						<b-form-select
 							id="ddlPerfil"
 							v-model="$v.form.id_perfilUsuario.$model"
-							value-field="id_PerfilUsuario"
-							text-field="nome"
 							:options="perfisUsuario"
 							:state="validateState('id_perfilUsuario')"
 							aria-describedby="input-ddlPerfil-feedback"
@@ -106,8 +99,6 @@
 						<b-form-select
 							id="ddlEmpresa"
 							v-model="$v.form.id_empresa.$model"
-							value-field="id_Empresa"
-							text-field="razaoSocial"
 							:options="empresas"
 							:state="validateState('id_empresa')"
 							aria-describedby="input-ddlEmpresa-feedback"
@@ -135,17 +126,14 @@ import { mapActions } from "vuex";
 import { required, minLength, helpers, email } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 
-// const passwordConfirmed = value =>
-// 	!helpers.req(value) || value === this.$v.form.passwordConfirm;
-// const passwordConfirmConfirmed = value =>
-// 	!helpers.req(value) || value === this.$v.form.senha;
 const isDDLEmpty = value => !helpers.req(value) || value != 0;
 
 export default {
+	mixins: [validationMixin],
+
 	components: {
 		Nav
 	},
-	mixins: [validationMixin],
 	data() {
 		return {
 			form: {
@@ -154,8 +142,8 @@ export default {
 				email: "",
 				senha: "",
 				passwordConfirm: "",
-				id_empresa: null,
-				id_perfilUsuario: null
+				id_empresa: 0,
+				id_perfilUsuario: 0
 			},
 			empresas: [],
 			perfisUsuario: [],
@@ -231,17 +219,16 @@ export default {
 	mounted() {
 		this.ActionGetAllEmpresasDDL().then(res => {
 			this.empresas = this.empresas.concat({
-				razaoSocial: "--Selecione Empresa--",
-				id_Empresa: 0
+				text: "--Selecione Empresa--",
+				value: 0
 			});
 			this.empresas = this.empresas.concat(res.data);
 		});
 		this.ActionGetAllPerfisUsuarioDDL().then(res => {
 			this.perfisUsuario = this.perfisUsuario.concat({
-				nome: "--Selecione Perfil--",
-				id_PerfilUsuario: 0,
-				usuarios: null
-			});
+				text: "--Selecione Perfil--",
+				value: 0,
+            });
 			this.perfisUsuario = this.perfisUsuario.concat(res.data);
 		});
 

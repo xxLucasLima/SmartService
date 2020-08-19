@@ -16,3 +16,63 @@
 /* Rules for using icons as white on a dark background. */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+.buttonPadrao {
+    background: coral !important;
+    border-color: coral !important;
+}
+.buttonPadrao:hover,
+.buttonPadrao:focus,
+.buttonPadrao:active,
+.open > .dropdown-toggle.buttonPadrao {
+    background-color: rgb(235, 103, 55) !important;
+    border-color: rgb(235, 103, 55) !important;
+    transition: 500ms !important;
+}
+
+.buttonPadrao:active,
+.open > .dropdown-toggle.buttonPadrao {
+    background-color: rgb(240, 88, 33) !important;
+    border-color: rgb(240, 88, 33) !important;
+    transition: 500ms !important;
+}
+
+.buttonExluir {
+    background: rgb(168, 0, 0) !important;
+    border-color: rgb(168, 0, 0) !important;
+}
+.buttonExluir:hover,
+.buttonExluir:focus,
+.buttonExluir:active,
+.open > .dropdown-toggle.buttonExluir {
+    background-color: rgb(128, 1, 1) !important;
+    border-color: rgb(128, 1, 1) !important;
+    transition: 500ms !important;
+}
+
+.buttonExluir:active,
+.open > .dropdown-toggle.buttonPadrao {
+    background-color: rgb(83, 1, 1) !important;
+    border-color: rgb(83, 1, 1) !important;
+    transition: 500ms !important;
+}
+
+.buttonEditar {
+    background: rgb(0, 46, 173) !important;
+    border-color: rgb(0, 46, 173) !important;
+}
+.buttonEditar:hover,
+.buttonEditar:focus,
+.buttonEditar:active,
+.open > .dropdown-toggle.buttonEditar {
+    background-color: rgb(0, 31, 116) !important;
+    border-color: rgb(0, 31, 116) !important;
+    transition: 500ms !important;
+}
+
+.buttonEditar:active,
+.open > .dropdown-toggle.buttonEditar {
+    background-color: rgb(1, 23, 82) !important;
+    border-color: rgb(1, 23, 82) !important;
+    transition: 500ms !important;
+}

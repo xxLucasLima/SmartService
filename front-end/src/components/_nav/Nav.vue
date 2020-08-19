@@ -13,8 +13,8 @@
 						<b-dropdown-item href="#">Vizualizar Empresas</b-dropdown-item>
 					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Usuarios" right>
-						<b-dropdown-item href="#">Criar Novo Usuario</b-dropdown-item>
-						<b-dropdown-item href="#">Vizualizar Usuários</b-dropdown-item>
+						<b-dropdown-item :to="{ name: 'usuario-form' }" >Criar Novo Usuario</b-dropdown-item>
+						<b-dropdown-item :to="{ name: 'usuarios' }" >Vizualizar Usuários</b-dropdown-item>
 					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Clientes" right>
 						<b-dropdown-item href="#">Criar Novo Cliente PJ</b-dropdown-item>
@@ -30,8 +30,8 @@
 						<b-dropdown-item href="#">Vizualizar Ordens de Serviço</b-dropdown-item>
 					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Produtos" right>
-						<b-dropdown-item href="#">Criar Produto</b-dropdown-item>
-						<b-dropdown-item href="#">Vizualizar Produtos</b-dropdown-item>
+						<b-dropdown-item :to="{ name: 'produto-form' }" >Criar Produto</b-dropdown-item>
+						<b-dropdown-item :to="{ name: 'produtos' }" >Vizualizar Produtos</b-dropdown-item>
 					</b-nav-item-dropdown>
 				</b-navbar-nav>
 
@@ -68,35 +68,35 @@ export default {
 
 		signOut() {
 			this.ActionSignOut();
-			location.reload()
+			location.reload();
 		}
 	}
 };
 </script>
 
 <style lang='scss'>
-#buttonUser {
-	font-size: 11pt;
-	border-radius: 50%;
-	width: 82px;
-	height: 82px;
-	border-color: coral;
+	#buttonUser {
+		font-size: 11pt;
+		border-radius: 50%;
+		width: 82px;
+		height: 82px;
+		border-color: coral;
 
-	border-style: solid;
-	border-width: 3px;
-}
+		border-style: solid;
+		border-width: 3px;
+	}
 
-#buttonUser a {
-	margin-left: 10px;
-	margin-top: 5px;
-}
+	#buttonUser a {
+		margin-left: 10px;
+		margin-top: 5px;
+	}
 
-#smartServiceBrand {
-	color: coral;
-}
+	#smartServiceBrand {
+		color: coral;
+	}
 
-#navBar {
-	padding-left: 20px;
-	padding-right: 20px;
-}
+	#navBar {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
 </style>

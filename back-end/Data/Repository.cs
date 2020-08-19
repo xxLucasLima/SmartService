@@ -13,6 +13,8 @@ namespace back_end.Data
             _context = context;
 
         }
+
+        #region Base
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);
@@ -33,7 +35,9 @@ namespace back_end.Data
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        //USUARIOS
+        #endregion
+
+        #region Usuário
         public async Task<Usuario[]> GetAllUsuariosAsync()
         {
             IQueryable<Usuario> query = _context.Usuario;
@@ -87,6 +91,63 @@ namespace back_end.Data
 
             return await query.ToArrayAsync();
         }
+
+        #endregion
+
+        #region Produto
+        public async Task<Produto[]> GetAllProdutosAsync()
+        {
+            IQueryable<Produto> query = _context.Produto;
+
+            query = query.Include(p => p.Lote);
+            query = query.Include(p => p.Cliente);
+            query = query.Include(p => p.DefeitoProduto);
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Produto);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Produto> GetProdutoAsyncById(int produtoId)
+        {
+            IQueryable<Produto> query = _context.Produto;
+
+            query = query.Include(p => p.Lote);
+            query = query.Include(p => p.Cliente);
+            query = query.Include(p => p.DefeitoProduto);
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Produto).Where(p => p.Id_Produto == produtoId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<DefeitoProduto[]> GetAllDefeitosProdutoDDL()
+        {
+            IQueryable<DefeitoProduto> query = _context.DefeitoProduto;
+
+            query = query.AsNoTracking().OrderBy(a => a.Descricao);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Cliente[]> GetAllClientesDDL()
+        {
+            IQueryable<Cliente> query = _context.Cliente;
+
+            query = query.AsNoTracking().OrderBy(a => a.NomeFantasia);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Lote[]> GetAllLotesDDL()
+        {
+            IQueryable<Lote> query = _context.Lote;
+
+            query = query.AsNoTracking().OrderBy(a => a.CodEntrada);
+
+            return await query.ToArrayAsync();
+        }
+        #endregion
 
     }
 }

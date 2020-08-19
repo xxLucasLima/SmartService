@@ -108,15 +108,15 @@ namespace back_end.Controllers
                 Empresa[] returns = await _repo.GetAllEmpresasDDL();
                 List<Empresa> empresas = new List<Empresa>(returns);
 
-                List<Empresa> results = new List<Empresa>();
+                List<EmpresaDDL> results = new List<EmpresaDDL>();
 
                 if (empresas != null & empresas.Count > 0)
                 {
                     foreach (Empresa item in empresas)
                     {
-                        Empresa e = new Empresa();
-                        e.razaoSocial = item.razaoSocial;
-                        e.Id_Empresa = item.Id_Empresa;
+                        EmpresaDDL e = new EmpresaDDL();
+                        e.Text = item.razaoSocial;
+                        e.Value = item.Id_Empresa;
                         results.Add(e);
                     }
                 }
@@ -137,15 +137,15 @@ namespace back_end.Controllers
                 PerfilUsuario[] returns = await _repo.GetAllPerfisUsuarioDDL();
                 List<PerfilUsuario> perfisUsuario = new List<PerfilUsuario>(returns);
 
-                List<PerfilUsuario> results = new List<PerfilUsuario>();
+                List<PerfilUsuarioDDL> results = new List<PerfilUsuarioDDL>();
 
                 if (perfisUsuario != null & perfisUsuario.Count > 0)
                 {
                     foreach (PerfilUsuario item in perfisUsuario)
                     {
-                        PerfilUsuario e = new PerfilUsuario();
-                        e.Nome = item.Nome;
-                        e.Id_PerfilUsuario = item.Id_PerfilUsuario;
+                        PerfilUsuarioDDL e = new PerfilUsuarioDDL();
+                        e.Text = item.Nome;
+                        e.Value = item.Id_PerfilUsuario;
                         results.Add(e);
                     }
                 }
