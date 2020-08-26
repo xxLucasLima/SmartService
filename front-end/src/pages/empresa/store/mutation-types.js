@@ -1,0 +1,2 @@
+export const CREATE_EMPRESA= 'CREATE_EMPRESA';
+export const GET_EMPRESAS= 'GET_EMPRESAS';

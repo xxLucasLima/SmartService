@@ -12,19 +12,5 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background-color: rgb(85, 85, 85);
-  font-family: "Montserrat", sans-serif;
-}
 
-.divForm {
-  margin-top: 60px;
-  margin: auto;
-  width: 50%;
-  padding: 40px 0 40px 0;
-}
-
-.buttonPadrao{
-  background-color: coral
-}
 </style>

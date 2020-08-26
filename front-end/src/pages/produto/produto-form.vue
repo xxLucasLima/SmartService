@@ -3,134 +3,140 @@
 		<Nav />
 		<div class="divForm">
 			<b-container>
-				<div class="titulo">
-					<label>Produto</label>
-				</div>
-				<b-form @submit.stop.prevent="onSubmit" v-if="show">
-					<b-form-group id="tipoGroup" label="Tipo:" label-for="tipo">
-						<b-form-input
-							id="tipo"
-							v-model="$v.form.tipo.$model"
-							placeholder="Digite o Tipo de Produto"
-							:state="validateState('tipo')"
-							aria-describedby="input-tipo-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-tipo-feedback">
-							<span v-if="!$v.form.tipo.required">O campo "Tipo" é obrigatório</span>
-							<span v-if="!$v.form.tipo.minLength">O campo "Tipo" não pode ter menos de 3 caracteres</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+				<b-card-group deck style="padding:30px">
+					<b-card header-tag="header">
+						<template v-slot:header>
+							<h4 class="mb-0" v-if="!idProduto">CRIAR NOVO PRODUTO</h4>
+							<h4 class="mb-0" v-if="idProduto">EDITAR PRODUTO</h4>
+						</template>
+						<b-form @submit.stop.prevent="onSubmit" v-if="show">
+							<b-form-group id="tipoGroup" label="Tipo:" label-for="tipo">
+								<b-form-input
+									id="tipo"
+									v-model="$v.form.tipo.$model"
+									placeholder="Digite o Tipo de Produto"
+									:state="validateState('tipo')"
+									aria-describedby="input-tipo-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-tipo-feedback">
+									<span v-if="!$v.form.tipo.required">O campo "Tipo" é obrigatório</span>
+									<span v-if="!$v.form.tipo.minLength">O campo "Tipo" não pode ter menos de 3 caracteres</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="descricaoGroup" label="Descrição:" label-for="descricao">
-						<b-form-input
-							id="descricao"
-							v-model="$v.form.descricao.$model"
-							placeholder="Digite a Descrição"
-							:state="validateState('descricao')"
-							aria-describedby="input-descricao-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-descricao-feedback">
-							<span v-if="!$v.form.descricao.required">O campo "Descrição" é obrigatório</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="descricaoGroup" label="Descrição:" label-for="descricao">
+								<b-form-input
+									id="descricao"
+									v-model="$v.form.descricao.$model"
+									placeholder="Digite a Descrição"
+									:state="validateState('descricao')"
+									aria-describedby="input-descricao-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-descricao-feedback">
+									<span v-if="!$v.form.descricao.required">O campo "Descrição" é obrigatório</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="ean13Group" label="EAN13:" label-for="ean13">
-						<b-form-input
-							id="ean13"
-							v-model="$v.form.ean13.$model"
-							placeholder="Digite o EAN13"
-							:state="validateState('ean13')"
-							aria-describedby="input-ean13-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-ean13-feedback">
-							<span v-if="!$v.form.ean13.required">O campo "EAN13" é obrigatório</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="ean13Group" label="EAN13:" label-for="ean13">
+								<b-form-input
+									id="ean13"
+									v-model="$v.form.ean13.$model"
+									placeholder="Digite o EAN13"
+									:state="validateState('ean13')"
+									aria-describedby="input-ean13-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-ean13-feedback">
+									<span v-if="!$v.form.ean13.required">O campo "EAN13" é obrigatório</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="imei1Group" label="IMEI1:" label-for="imei1">
-						<b-form-input
-							id="imei1"
-							v-model="$v.form.imei1.$model"
-							placeholder="Digite o IMEI1"
-							:state="validateState('imei1')"
-							aria-describedby="input-imei1-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-imei1-feedback">
-							<span v-if="!$v.form.imei1.required">O campo "IMEI1" é obrigatório</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="imei1Group" label="IMEI1:" label-for="imei1">
+								<b-form-input
+									id="imei1"
+									v-model="$v.form.imei1.$model"
+									placeholder="Digite o IMEI1"
+									:state="validateState('imei1')"
+									aria-describedby="input-imei1-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-imei1-feedback">
+									<span v-if="!$v.form.imei1.required">O campo "IMEI1" é obrigatório</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="imei2Group" label="IMEI2:" label-for="imei2">
-						<b-form-input
-							id="imei2"
-							v-model="$v.form.imei2.$model"
-							placeholder="Digite o IMEI2"
-							:state="validateState('imei2')"
-							aria-describedby="input-imei2-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-imei2-feedback">
-							<span v-if="!$v.form.imei2.required">O campo "IMEI1" é obrigatório</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="imei2Group" label="IMEI2:" label-for="imei2">
+								<b-form-input
+									id="imei2"
+									v-model="$v.form.imei2.$model"
+									placeholder="Digite o IMEI2"
+									:state="validateState('imei2')"
+									aria-describedby="input-imei2-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-imei2-feedback">
+									<span v-if="!$v.form.imei2.required">O campo "IMEI1" é obrigatório</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="modeloGroup" label="Modelo:" label-for="modelo">
-						<b-form-input
-							id="modelo"
-							v-model="$v.form.modelo.$model"
-							placeholder="Digite o Modelo"
-							:state="validateState('modelo')"
-							aria-describedby="input-modelo-feedback"
-						></b-form-input>
-						<b-form-invalid-feedback id="input-modelo-feedback">
-							<span v-if="!$v.form.modelo.required">O campo "Modelo" é obrigatório</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="modeloGroup" label="Modelo:" label-for="modelo">
+								<b-form-input
+									id="modelo"
+									v-model="$v.form.modelo.$model"
+									placeholder="Digite o Modelo"
+									:state="validateState('modelo')"
+									aria-describedby="input-modelo-feedback"
+								></b-form-input>
+								<b-form-invalid-feedback id="input-modelo-feedback">
+									<span v-if="!$v.form.modelo.required">O campo "Modelo" é obrigatório</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="clienteGroup" label=" Cliente: ">
-						<b-form-select
-							id="ddlCliente"
-							v-model="$v.form.id_cliente.$model"
-							:options="clientes"
-							:state="validateState('id_cliente')"
-							aria-describedby="input-ddlCliente-feedback"
-						></b-form-select>
-						<b-form-invalid-feedback id="input-ddlCliente-feedback">
-							<span v-if="!$v.form.id_cliente.isDDLEmpty">Uma opção de "Cliente" deve ser escolhida</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="clienteGroup" label=" Cliente: ">
+								<b-form-select
+									id="ddlCliente"
+									v-model="$v.form.id_cliente.$model"
+									:options="clientes"
+									:state="validateState('id_cliente')"
+									aria-describedby="input-ddlCliente-feedback"
+								></b-form-select>
+								<b-form-invalid-feedback id="input-ddlCliente-feedback">
+									<span v-if="!$v.form.id_cliente.isDDLEmpty">Uma opção de "Cliente" deve ser escolhida</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="loteGroup" label=" Lote: ">
-						<b-form-select
-							id="ddlLote"
-							v-model="$v.form.id_lote.$model"
-							:options="lotes"
-							:state="validateState('id_lote')"
-							aria-describedby="input-ddlLote-feedback"
-						></b-form-select>
-						<b-form-invalid-feedback id="input-ddlLote-feedback">
-							<span v-if="!$v.form.id_lote.isDDLEmpty">Uma opção de "Lote" deve ser escolhida</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="loteGroup" label=" Lote: ">
+								<b-form-select
+									id="ddlLote"
+									v-model="$v.form.id_lote.$model"
+									:options="lotes"
+									:state="validateState('id_lote')"
+									aria-describedby="input-ddlLote-feedback"
+								></b-form-select>
+								<b-form-invalid-feedback id="input-ddlLote-feedback">
+									<span v-if="!$v.form.id_lote.isDDLEmpty">Uma opção de "Lote" deve ser escolhida</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-form-group id="defeitoProdutoGroup" label=" Defeito do Produto: ">
-						<b-form-select
-							id="ddlDefeitoProduto"
-							v-model="$v.form.id_defeitoProduto.$model"
-							:options="defeitosProduto"
-							:state="validateState('id_defeitoProduto')"
-							aria-describedby="input-ddlDefeitoProduto-feedback"
-						></b-form-select>
-						<b-form-invalid-feedback id="input-ddlDefeitoProduto-feedback">
-							<span
-								v-if="!$v.form.id_defeitoProduto.isDDLEmpty"
-							>Uma opção de "Defeito do Produto" deve ser escolhida</span>
-						</b-form-invalid-feedback>
-					</b-form-group>
+							<b-form-group id="defeitoProdutoGroup" label=" Defeito do Produto: ">
+								<b-form-select
+									id="ddlDefeitoProduto"
+									v-model="$v.form.id_defeitoProduto.$model"
+									:options="defeitosProduto"
+									:state="validateState('id_defeitoProduto')"
+									aria-describedby="input-ddlDefeitoProduto-feedback"
+								></b-form-select>
+								<b-form-invalid-feedback id="input-ddlDefeitoProduto-feedback">
+									<span
+										v-if="!$v.form.id_defeitoProduto.isDDLEmpty"
+									>Uma opção de "Defeito do Produto" deve ser escolhida</span>
+								</b-form-invalid-feedback>
+							</b-form-group>
 
-					<b-container class="text-center">
-						<b-button type="submit" variant="primary">Criar Produto</b-button>
-					</b-container>
-				</b-form>
+							<b-container class="text-center">
+								<b-button v-if="!this.idProduto" type="submit" class="buttonCriarNovo">Criar Produto</b-button>
+								<b-button v-if="this.idProduto" type="submit" class="buttonCriarNovo">Editar Produto</b-button>
+							</b-container>
+						</b-form>
+					</b-card>
+				</b-card-group>
 			</b-container>
 		</div>
 	</div>
@@ -218,16 +224,44 @@ export default {
 				if (this.idProduto) {
 					_produto.id_Produto = this.idProduto;
 					await this.ActionEditProduto(_produto).then(() => {
-						alert("Usuario editado com sucesso");
+						this.showToastConfirmation(false);
 					});
 				} else {
 					await this.ActionCreateProduto(_produto).then(() => {
-						alert("Usuario criado com sucesso");
+						this.showToastConfirmation(true);
 					});
 				}
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
+			}
+			this.cleanForm();
+		},
+		cleanForm() {
+			this.form.tipo = "";
+			this.form.descricao = "";
+			this.form.ean13 = "";
+			this.form.imei1 = "";
+			this.form.imei2 = "";
+			this.form.modelo = "";
+			this.form.id_defeitoProduto = "";
+			this.form.id_lote = "";
+			this.form.id_cliente = "";
+			this.$v.$reset();
+		},
+		showToastConfirmation(isCreated) {
+			if (isCreated) {
+				this.$bvToast.toast("Produto criado com sucesso!", {
+					title: "Sucesso",
+					autoHideDelay: 5000,
+					variant: "success"
+				});
+			} else {
+				this.$bvToast.toast("Produto editado com sucesso!", {
+					title: "Sucesso",
+					autoHideDelay: 5000,
+					variant: "success"
+				});
 			}
 		}
 	},
@@ -267,22 +301,12 @@ export default {
 				this.form.id_defeitoProduto =
 					produtoReturn.defeitoProduto.id_DefeitoProduto;
 				this.form.id_lote = produtoReturn.lote.id_Lote;
-                this.form.id_cliente = produtoReturn.cliente.id_Cliente;
-            });
-            
+				this.form.id_cliente = produtoReturn.cliente.id_Cliente;
+			});
 		}
 	}
 };
 </script>
 
 <style>
-	.titulo {
-		margin: auto;
-		width: 25%;
-	}
-	.titulo label {
-		font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-			"Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-		font-size: 42pt;
-	}
 </style>

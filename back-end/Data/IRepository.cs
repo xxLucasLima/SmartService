@@ -30,5 +30,23 @@ namespace back_end.Data
 
         #endregion
 
+        #region Lote
+
+        Task<Lote[]> GetAllLotesAsync();
+        Task<Lote> GetLoteAsyncById(int loteId);
+        #endregion
+
+        #region Cliente
+
+        Task<Cliente[]> GetAllClientesAsync();
+        Task<Cliente> GetClienteAsyncById(int loteId);
+        #endregion
+        
+        #region Empresa
+
+        Task<Empresa[]> GetAllEmpresasAsync();
+        Task<Empresa> GetEmpresaAsyncById(int empresaId);
+        #endregion
+
     }
 }

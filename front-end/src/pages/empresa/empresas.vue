@@ -1,15 +1,15 @@
 <template>
-	<div class="produtos">
+	<div class="empresas">
 		<Nav />
 		<div class="divForm">
 			<b-container>
 				<div class="titulo">
-					<label>Produtos</label>
+					<label>Empresas</label>
 				</div>
 				<br />
 				<b-row class="justify-content-md-center">
-					<b-col sm="4" md="auto">
-						<label>Pesquise pelo tipo:</label>
+					<b-col sm="4" md="auto"> 
+						<label>Pesquise pelo CNPJ:</label>
 					</b-col>
 					<b-col sm="4">
 						<b-form-input
@@ -22,23 +22,25 @@
 						></b-form-input>
 					</b-col>
 					<b-col sm="4" class="text-right">
-						<b-button :to="{ name: 'produto-form' }" class="buttonCriarNovo" size="sm">Criar Novo Produto</b-button>
+						<b-button :to="{ name: 'empresa-form' }" disabled class="buttonCriarNovo" size="sm">Criar Nova Empresa</b-button>
 					</b-col>
 				</b-row>
 				<br />
 				<div>
 					<b-table
-						id="tableProdutos"
+						id="tableEmpresas"
 						striped
-						empty-text="Não foi possível localizar registros de Produtos"
-						empty-filtered-text="Não foi possível localizar Tipo de Produtos baseado na informação descrita"
+						empty-text="Não foi possível localizar registros de Empresas"
+						empty-filtered-text="Não foi possível localizar Descrição de Empresas baseado na informação descrita"
 						primary-key="tipo"
 						:busy="busy"
 						:head-variant="'dark'"
-						:items="produtos"
+						:items="empresas"
 						:fields="fields"
 						:filter="filter"
-						:filterIncludedFields="['tipo']"
+						:filterIncludedFields="['cnpj']"
+						:per-page="perPage"
+						:current-page="currentPage"
 						show-empty
 					>
 						<template v-slot:empty="scope">
@@ -61,8 +63,8 @@
 									size="sm"
 									class="mr-2 buttonExluir"
 									v-b-tooltip.hover
-									title="Excluir Produto"
-									@click.prevent="showConfirmMsg('Produto', bvModal, excluirProduto, row.item.id_Produto)"
+									title="Excluir Empresa"
+									@click.prevent="showConfirmMsg('Empresa', bvModal, excluirEmpresa, row.item.id_Empresa)"
 								>
 									<i class="material-icons md-24">delete</i>
 								</b-button>
@@ -71,8 +73,8 @@
 									size="sm"
 									class="mr-2 buttonEditar"
 									v-b-tooltip.hover
-									title="Editar Produto"
-									@click.prevent="editarUsuario(row.item.id_Produto)"
+									title="Editar Empresa"
+									@click.prevent="editarEmpresa(row.item.id_Empresa)"
 								>
 									<i class="material-icons md-24">edit</i>
 								</b-button>
@@ -81,7 +83,7 @@
 									size="sm"
 									class="mr-2 buttonPadrao"
 									v-b-tooltip.hover
-									title="Detalhes do Produto"
+									title="Detalhes do Empresa"
 									@click="info(row.item, row.index, $event.target)"
 								>
 									<i class="material-icons md-24">menu</i>
@@ -93,7 +95,7 @@
 						v-model="currentPage"
 						:total-rows="rows"
 						:per-page="perPage"
-						aria-controls="tableProdutos"
+						aria-controls="tableEmpresas"
 						align="fill"
 						size="sm"
 					></b-pagination>
@@ -120,6 +122,7 @@ export default {
 		return {
 			perPage: 6,
 			currentPage: 1,
+			EmpresasTrataveis: this.empresas,
 			bvModal: this.$bvModal,
 			showConfirmMsg: showConfirmMsg,
 			filter: null,
@@ -128,40 +131,26 @@ export default {
 				id: "info-modal",
 				title: "",
 				content: "",
-				produto: {}
+				empresa: {}
 			},
 			fields: [
 				{
-					key: "tipo",
-					label: "TIPO",
+					key: "nomeFantasia",
+					label: "NOME FANTASIA",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
-					key: "observacao",
-					label: "OBSERVAÇÃO",
-					sortable: true,
-					tdClass: "tdTable",
-					thStyle: { minWidth: "180px", textAlign: "center" }
-				},
-				{
-					key: "descricao",
-					label: "DESCRIÇÃO",
-					sortable: true,
-					tdClass: "tdTable",
-					thStyle: { minWidth: "180px", textAlign: "center" }
-				},
-				{
-					key: "cliente.nomeFantasia",
-					label: "CLIENTE",
+					key: "cnpj",
+					label: "CNPJ",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
 					key: "Detalhes",
-					label: " ",
+                    label: " ",
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				}
@@ -169,22 +158,22 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions("produto", [
-			"ActionGetAllProdutos",
-			"ActionDeleteProdutoById"
+		...mapActions("empresa", [
+			"ActionGetAllEmpresas",
+			"ActionDeleteEmpresaById"
 		]),
-		async excluirProduto(id_Produto) {
+		async excluirEmpresa(id_Empresa) {
 			try {
-				await this.ActionDeleteProdutoById(id_Produto);
-				this.ActionGetAllProdutos();
+				await this.ActionDeleteEmpresaById(id_Empresa);
+				this.ActionGetAllEmpresas();
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
 			}
 		},
-		editarUsuario(id_Produto) {
+		editarEmpresa(id_Empresa) {
 			try {
-				this.$router.push("produto-form/" + id_Produto);
+					this.$router.push("empresa-form/" + id_Empresa);
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
@@ -202,18 +191,21 @@ export default {
 		}
 	},
 	mounted() {
-		this.ActionGetAllProdutos().then(() => {
+		this.ActionGetAllEmpresas().then(() => {
 			this.busy = false;
 		});
 	},
 	computed: {
-		...mapState("produto", ["produtos"]),
+		...mapState("empresa", ["empresas"]),
 		rows() {
-			return this.produtos.length;
+			return this.empresas.length;
 		}
 	}
 };
 </script>
 
 <style>
+
+
+
 </style>

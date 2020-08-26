@@ -1,15 +1,15 @@
 <template>
-	<div class="produtos">
+	<div class="lotes">
 		<Nav />
 		<div class="divForm">
 			<b-container>
 				<div class="titulo">
-					<label>Produtos</label>
+					<label>Lotes</label>
 				</div>
 				<br />
 				<b-row class="justify-content-md-center">
 					<b-col sm="4" md="auto">
-						<label>Pesquise pelo tipo:</label>
+						<label>Pesquise pela descrição:</label>
 					</b-col>
 					<b-col sm="4">
 						<b-form-input
@@ -22,23 +22,26 @@
 						></b-form-input>
 					</b-col>
 					<b-col sm="4" class="text-right">
-						<b-button :to="{ name: 'produto-form' }" class="buttonCriarNovo" size="sm">Criar Novo Produto</b-button>
+						<b-button :to="{ name: 'lote-form' }" class="buttonCriarNovo" size="sm">Criar Novo Lote</b-button>
 					</b-col>
 				</b-row>
 				<br />
+
 				<div>
 					<b-table
-						id="tableProdutos"
+						id="tableLotes"
 						striped
-						empty-text="Não foi possível localizar registros de Produtos"
-						empty-filtered-text="Não foi possível localizar Tipo de Produtos baseado na informação descrita"
+						empty-text="Não foi possível localizar registros de Lotes"
+						empty-filtered-text="Não foi possível localizar Descrição de Lotes baseado na informação descrita"
 						primary-key="tipo"
 						:busy="busy"
 						:head-variant="'dark'"
-						:items="produtos"
+						:items="lotes"
 						:fields="fields"
 						:filter="filter"
-						:filterIncludedFields="['tipo']"
+						:filterIncludedFields="['descricao']"
+						:per-page="perPage"
+						:current-page="currentPage"
 						show-empty
 					>
 						<template v-slot:empty="scope">
@@ -61,8 +64,8 @@
 									size="sm"
 									class="mr-2 buttonExluir"
 									v-b-tooltip.hover
-									title="Excluir Produto"
-									@click.prevent="showConfirmMsg('Produto', bvModal, excluirProduto, row.item.id_Produto)"
+									title="Excluir Lote"
+									@click.prevent="showConfirmMsg('Lote', bvModal, excluirLote, row.item.id_Lote)"
 								>
 									<i class="material-icons md-24">delete</i>
 								</b-button>
@@ -71,8 +74,8 @@
 									size="sm"
 									class="mr-2 buttonEditar"
 									v-b-tooltip.hover
-									title="Editar Produto"
-									@click.prevent="editarUsuario(row.item.id_Produto)"
+									title="Editar Lote"
+									@click.prevent="editarLote(row.item.id_Lote)"
 								>
 									<i class="material-icons md-24">edit</i>
 								</b-button>
@@ -81,7 +84,7 @@
 									size="sm"
 									class="mr-2 buttonPadrao"
 									v-b-tooltip.hover
-									title="Detalhes do Produto"
+									title="Detalhes do Lote"
 									@click="info(row.item, row.index, $event.target)"
 								>
 									<i class="material-icons md-24">menu</i>
@@ -93,7 +96,7 @@
 						v-model="currentPage"
 						:total-rows="rows"
 						:per-page="perPage"
-						aria-controls="tableProdutos"
+						aria-controls="tableLotes"
 						align="fill"
 						size="sm"
 					></b-pagination>
@@ -120,6 +123,7 @@ export default {
 		return {
 			perPage: 6,
 			currentPage: 1,
+			LotesTrataveis: this.lotes,
 			bvModal: this.$bvModal,
 			showConfirmMsg: showConfirmMsg,
 			filter: null,
@@ -128,23 +132,9 @@ export default {
 				id: "info-modal",
 				title: "",
 				content: "",
-				produto: {}
+				lote: {}
 			},
 			fields: [
-				{
-					key: "tipo",
-					label: "TIPO",
-					sortable: true,
-					tdClass: "tdTable",
-					thStyle: { minWidth: "180px", textAlign: "center" }
-				},
-				{
-					key: "observacao",
-					label: "OBSERVAÇÃO",
-					sortable: true,
-					tdClass: "tdTable",
-					thStyle: { minWidth: "180px", textAlign: "center" }
-				},
 				{
 					key: "descricao",
 					label: "DESCRIÇÃO",
@@ -153,8 +143,29 @@ export default {
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
-					key: "cliente.nomeFantasia",
-					label: "CLIENTE",
+					key: "codEntrada",
+					label: "CÓDIGO ENTR.",
+					sortable: true,
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				},
+				{
+					key: "codSaida",
+					label: "CÓDIGO SAÍDA",
+					sortable: true,
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				},
+				{
+					key: "dataEntrada",
+					label: "DATA ENTRADA",
+					sortable: true,
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				},
+				{
+					key: "dataSaida",
+					label: "DATA SAÍDA",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
@@ -169,22 +180,19 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions("produto", [
-			"ActionGetAllProdutos",
-			"ActionDeleteProdutoById"
-		]),
-		async excluirProduto(id_Produto) {
+		...mapActions("lote", ["ActionGetAllLotes", "ActionDeleteLoteById"]),
+		async excluirLote(id_Lote) {
 			try {
-				await this.ActionDeleteProdutoById(id_Produto);
-				this.ActionGetAllProdutos();
+				await this.ActionDeleteLoteById(id_Lote);
+				this.ActionGetAllLotes();
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
 			}
 		},
-		editarUsuario(id_Produto) {
+		editarLote(id_Lote) {
 			try {
-				this.$router.push("produto-form/" + id_Produto);
+				this.$router.push("lote-form/" + id_Lote);
 			} catch (err) {
 				window.alert("Ocorreu algum erro");
 				console.error(err);
@@ -202,14 +210,14 @@ export default {
 		}
 	},
 	mounted() {
-		this.ActionGetAllProdutos().then(() => {
+		this.ActionGetAllLotes().then(() => {
 			this.busy = false;
 		});
 	},
 	computed: {
-		...mapState("produto", ["produtos"]),
+		...mapState("lote", ["lotes"]),
 		rows() {
-			return this.produtos.length;
+			return this.lotes.length;
 		}
 	}
 };

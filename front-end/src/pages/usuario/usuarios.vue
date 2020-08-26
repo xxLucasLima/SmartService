@@ -12,7 +12,7 @@
 					<b-col sm="4" md="auto">
 						<label>Pesquise pelo e-mail:</label>
 					</b-col>
-					<b-col sm="5">
+					<b-col sm="4">
 						<b-form-input
 							size="sm"
 							md="auto"
@@ -22,11 +22,8 @@
 							v-model="filter"
 						></b-form-input>
 					</b-col>
-					<b-col sm="3">
-						<b-button pill class="buttonPadrao" size="sm">
-							<i class="material-icons md-18">search</i>
-							Pesquisar
-						</b-button>
+					<b-col sm="4" class="text-right">
+						<b-button :to="{ name: 'usuario-form' }" class="buttonCriarNovo" size="sm">Criar Novo Usuário</b-button>
 					</b-col>
 				</b-row>
 				<br />
@@ -41,7 +38,6 @@
 						:head-variant="'dark'"
 						:items="usuarios"
 						:fields="fields"
-						:tbody-transition-props="transProps"
 						:filter="filter"
 						:filterIncludedFields="['email']"
 						show-empty
@@ -96,6 +92,14 @@
 
 						<template v-slot:cell(nome)="data">{{ data.item.nome }} {{ data.item.sobrenome }}</template>
 					</b-table>
+					<b-pagination
+						v-model="currentPage"
+						:total-rows="rows"
+						:per-page="perPage"
+						aria-controls="tableUsuarios"
+						align="fill"
+						size="sm"
+					></b-pagination>
 				</div>
 				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
 					<pre>{{ infoModal.content }}</pre>
@@ -108,16 +112,16 @@
 <script>
 import Nav from "../../components/_nav/Nav";
 import { mapActions, mapState } from "vuex";
-import { BModal, VBModal } from "bootstrap-vue";
 import { showConfirmMsg } from "../../helpers/messageBoxes/messageConfirm.js";
 
 export default {
 	components: {
-		Nav,
-		"b-modal": BModal
+		Nav
 	},
 	data() {
 		return {
+			perPage: 6,
+			currentPage: 1,
 			bvModal: this.$bvModal,
 			showConfirmMsg: showConfirmMsg,
 			filter: null,
@@ -128,40 +132,38 @@ export default {
 				content: "",
 				usuario: {}
 			},
-			transProps: {
-				name: "flip-list"
-			},
 			fields: [
 				{
 					key: "email",
-					label: "E-mail",
+					label: "E-MAIL",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
 					key: "nome",
-					label: "Nome",
+					label: "NOME",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
 					key: "empresa.nomeFantasia",
-					label: "Empresa Associada",
+					label: "EMP. ASSOCIADA",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
 					key: "perfilUsuario.nome",
-					label: "Perfil de Acesso",
+					label: "PERFIL ACESSO",
 					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				},
 				{
 					key: "Detalhes",
+					label: " ",
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				}
@@ -207,21 +209,13 @@ export default {
 		});
 	},
 	computed: {
-		...mapState("usuario", ["usuarios"])
+		...mapState("usuario", ["usuarios"]),
+		rows() {
+			return this.usuarios.length;
+		}
 	}
 };
 </script>
 
 <style  lang='scss' >
-	.flip-list-move {
-		transition: transform 1s;
-	}
-
-	.tdTable {
-		min-width: 180px;
-		text-align: center;
-	}
-	#tableUsuarios {
-		margin-left: -180px;
-	}
 </style>

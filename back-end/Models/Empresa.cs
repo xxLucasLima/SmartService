@@ -10,7 +10,7 @@ namespace back_end.Models
         public string Cnpj { get; set; }
         public DateTime DataCriacao { get; set; }
         public string NomeFantasia { get; set; }
-        public string razaoSocial { get; set; }
+        public string RazaoSocial { get; set; }
         public ICollection<Usuario> Usuarios { get; set; }
     }
 

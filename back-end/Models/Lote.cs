@@ -7,6 +7,8 @@ namespace back_end.Models
     {
         public long Id_Lote { get; set; }
         public string CodEntrada { get; set; }
+        public string Descricao { get; set; }
+
         public string CodSaida { get; set; }
         public DateTime DataEntrada { get; set; }
         public DateTime DataSaida { get; set; }

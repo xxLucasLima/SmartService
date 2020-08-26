@@ -78,7 +78,7 @@ namespace back_end.Data
         {
             IQueryable<Empresa> query = _context.Empresa;
 
-            query = query.AsNoTracking().OrderBy(a => a.razaoSocial);
+            query = query.AsNoTracking().OrderBy(a => a.RazaoSocial);
 
             return await query.ToArrayAsync();
         }
@@ -149,5 +149,66 @@ namespace back_end.Data
         }
         #endregion
 
+        #region Lote
+        public async Task<Lote[]> GetAllLotesAsync()
+        {
+            IQueryable<Lote> query = _context.Lote;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Lote);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Lote> GetLoteAsyncById(int loteId)
+        {
+            IQueryable<Lote> query = _context.Lote;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Lote).Where(aluno => aluno.Id_Lote == loteId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        #endregion
+
+        #region Cliente
+        public async Task<Cliente[]> GetAllClientesAsync()
+        {
+            IQueryable<Cliente> query = _context.Cliente;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Cliente);
+
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Cliente> GetClienteAsyncById(int clienteId)
+        {
+            IQueryable<Cliente> query = _context.Cliente;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Cliente).Where(aluno => aluno.Id_Cliente == clienteId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        #endregion
+    
+        #region Empresa
+        public async Task<Empresa[]> GetAllEmpresasAsync()
+        {
+            IQueryable<Empresa> query = _context.Empresa;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Empresa);
+
+            return await query.ToArrayAsync();
+        }
+        public async Task<Empresa> GetEmpresaAsyncById(int empresaId)
+        {
+            IQueryable<Empresa> query = _context.Empresa;
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Empresa).Where(empresa => empresa.Id_Empresa == empresaId);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        #endregion
     }
 }

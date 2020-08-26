@@ -100,6 +100,33 @@ namespace back_end.Controllers
 
         }
 
+        [HttpPut("{idUsuario}")]
+        public async Task<IActionResult> Put(int idUsuario, Usuario payload)
+        {
+            try
+            {
+                var usuario = await _repo.GetUsuarioAsyncById(idUsuario);
+
+                if (usuario == null)
+                    return NotFound();
+
+                _repo.Update(payload);
+
+                if (await _repo.SaveChangesAsync())
+                {
+                    usuario = await _repo.GetUsuarioAsyncById(idUsuario);
+                    return Created($"/api/usuario/{payload.Id_Usuario}", usuario);
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou: " + ex.Message);
+            }
+            return BadRequest();
+
+        }
+
         [HttpGet("getAllEmpresasDDL/")]
         public async Task<IActionResult> GetAllEmpresasDDL()
         {
@@ -115,7 +142,7 @@ namespace back_end.Controllers
                     foreach (Empresa item in empresas)
                     {
                         EmpresaDDL e = new EmpresaDDL();
-                        e.Text = item.razaoSocial;
+                        e.Text = item.RazaoSocial;
                         e.Value = item.Id_Empresa;
                         results.Add(e);
                     }
@@ -157,32 +184,6 @@ namespace back_end.Controllers
             }
         }
 
-        [HttpPut("{idUsuario}")]
-        public async Task<IActionResult> Put(int idUsuario, Usuario payload)
-        {
-            try
-            {
-                var usuario = await _repo.GetUsuarioAsyncById(idUsuario);
-
-                if (usuario == null)
-                    return NotFound();
-
-                _repo.Update(payload);
-
-                if (await _repo.SaveChangesAsync())
-                {
-                    usuario = await _repo.GetUsuarioAsyncById(idUsuario);
-                    return Created($"/api/usuario/{payload.Id_Usuario}", usuario);
-                }
-            }
-            catch (System.Exception ex)
-            {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou: " + ex.Message);
-            }
-            return BadRequest();
-
-        }
 
     }
 }

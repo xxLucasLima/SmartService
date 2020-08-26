@@ -19,7 +19,9 @@ namespace back_end.Models
         public string Cidade { get; set; }
         public DateTime DataCriacao { get; set; }
         public ICollection<Produto> Produtos { get; set; }
-
+        public string NomeCompleto { get; set; }
+        public DateTime DataNascimento { get; set; }
+    
     }
 
     
