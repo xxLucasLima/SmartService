@@ -19,12 +19,15 @@ export const ActionGetUsuarioById = ({ commit }, payload) => {
 }
 
 export const ActionEditUsuario = ({ commit }, payload) => {
-    console.log(payload)
-    services.usuario.editUsuario({idUsuario: routes.currentRoute.params.id_Usuario},payload);
+    services.usuario.editUsuario({ idUsuario: routes.currentRoute.params.id_Usuario }, payload);
+}
+
+export const ActionResetPassUsuarioById = ({ commit }, payload) => {
+    return services.usuario.resetPassUsuario({ idUsuario: payload})
 }
 
 export const ActionDeleteUsuarioById = ({ commit }, payload) => {
-    services.usuario.deleteUsuarioById({ idUsuario: payload });
+    return services.usuario.deleteUsuarioById({ idUsuario: payload });
 }
 
 export const ActionGetAllEmpresasDDL = ({ commit }) => {

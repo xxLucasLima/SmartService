@@ -101,8 +101,94 @@
 						size="sm"
 					></b-pagination>
 				</div>
-				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-					<pre>{{ infoModal.content }}</pre>
+				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal" size="lg">
+					<b-card-group deck style="padding:10px">
+						<b-card header-tag="header">
+							<div class="row">
+								<div class="col-3">
+									<label>
+										<strong>Email:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.email"></b-form-input>
+								</div>
+
+								<div class="col-3">
+									<label>
+										<strong>Data Criação:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input
+										size="sm"
+										disabled
+										v-model="infoModal.content.dataCriacao"
+										v-mask="'##/##/####'"
+									></b-form-input>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-3">
+									<label>
+										<strong>Nome:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.nome"></b-form-input>
+								</div>
+								<div class="col-3">
+									<label>
+										<strong>Sobrenome:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.sobrenome"></b-form-input>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-3">
+									<label>
+										<strong>Empresa:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input
+										size="sm"
+										disabled
+										v-if="infoModal.content.empresa"
+										v-model="infoModal.content.empresa.nomeFantasia"
+									></b-form-input>
+								</div>
+								<div class="col-3">
+									<label>
+										<strong>Perfil:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input
+										size="sm"
+										disabled
+										v-if="infoModal.content.perfilUsuario"
+										v-model="infoModal.content.perfilUsuario.nome"
+									></b-form-input>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-12 text-center">
+									<b-button
+										size="md"
+										class="mr-2 buttonCriarNovo"
+										v-b-tooltip.hover
+										@click.prevent="showConfirmResetMsg(infoModal.content.nome, bvModal, resetarSenhaUsuario, infoModal.content.id_Usuario)"
+									>Resetar Senha</b-button>
+								</div>
+							</div>
+						</b-card>
+					</b-card-group>
 				</b-modal>
 			</b-container>
 		</div>
@@ -112,7 +198,11 @@
 <script>
 import Nav from "../../components/_nav/Nav";
 import { mapActions, mapState } from "vuex";
-import { showConfirmMsg } from "../../helpers/messageBoxes/messageConfirm.js";
+import {
+	showConfirmMsg,
+	showConfirmResetMsg
+} from "../../helpers/messageBoxes/messageConfirm.js";
+import { parseDateToLocal } from "../../helpers/dateHandler/dateHandler";
 
 export default {
 	components: {
@@ -124,6 +214,7 @@ export default {
 			currentPage: 1,
 			bvModal: this.$bvModal,
 			showConfirmMsg: showConfirmMsg,
+			showConfirmResetMsg: showConfirmResetMsg,
 			filter: null,
 			busy: true,
 			infoModal: {
@@ -173,15 +264,17 @@ export default {
 	methods: {
 		...mapActions("usuario", [
 			"ActionGetAllUsuarios",
-			"ActionDeleteUsuarioById"
+			"ActionDeleteUsuarioById",
+			"ActionResetPassUsuarioById"
 		]),
 		async excluirUsuario(id_Usuario) {
 			try {
-				await this.ActionDeleteUsuarioById(id_Usuario);
-				this.ActionGetAllUsuarios();
+				await this.ActionDeleteUsuarioById(id_Usuario).then(() => {
+					this.showToastDeleteConfirmation();
+					this.ActionGetAllUsuarios();
+				});
 			} catch (err) {
-				window.alert("Ocorreu algum erro");
-				console.error(err);
+				this.showToastDeleteErro(err.body);
 			}
 		},
 		editarUsuario(id_Usuario) {
@@ -193,14 +286,47 @@ export default {
 			}
 		},
 		info(item, index, button) {
-			this.infoModal.title = `Row index: ${index}`;
-			this.infoModal.content = JSON.stringify(item, null, 2);
+			this.infoModal.title = `Detalhes do Usuario: ${item.nome}`;
+			item.dataCriacao = parseDateToLocal(item.dataCriacao);
+			this.infoModal.content = item;
 
 			this.$bvModal.show(this.infoModal.id);
+		},
+		async resetarSenhaUsuario(id_Usuario) {
+			try {
+				await this.ActionResetPassUsuarioById(id_Usuario).then(() => {
+					this.showToastConfirmation(true);
+				});
+			} catch (err) {
+				window.alert("Ocorreu algum erro");
+				console.error(err);
+			}
 		},
 		resetInfoModal() {
 			this.infoModal.title = "";
 			this.infoModal.content = "";
+		},
+		showToastConfirmation() {
+			this.$bvToast.toast("Senha resetada com sucesso!", {
+				title: "Sucesso",
+				autoHideDelay: 5000,
+				variant: "success"
+			});
+		},
+		showToastDeleteConfirmation() {
+			this.$bvToast.toast("Usuario excluido com sucesso!", {
+				title: "Sucesso",
+				autoHideDelay: 5000,
+				variant: "success"
+			});
+		},
+
+		showToastDeleteErro(err) {
+			this.$bvToast.toast(`${err}`, {
+				title: "Erro ao Excluir Usuario!",
+				autoHideDelay: 5000,
+				variant: "danger"
+			});
 		}
 	},
 	mounted() {

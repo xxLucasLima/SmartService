@@ -34,9 +34,11 @@
 									placeholder="Digite o CPF"
 									:state="validateState('cnpjcpf')"
 									aria-describedby="input-cnpjcpf-feedback"
+									v-mask="'###.###.###-##'"
 								></b-form-input>
 								<b-form-invalid-feedback id="input-cnpjcpf-feedback">
-									<span v-if="!$v.form.cnpjcpf.required">O campo "CPF" é obrigatório</span>
+									<span v-if="!$v.form.cnpjcpf.required">O campo "CPF" é obrigatório</span>&nbsp;&nbsp;
+									<span v-if="!$v.form.cnpjcpf.minLength">O campo "CPF" está incompleto</span>
 								</b-form-invalid-feedback>
 							</b-form-group>
 							<div class="row">
@@ -61,9 +63,11 @@
 										placeholder="Digite o CEP:"
 										:state="validateState('cep')"
 										aria-describedby="input-cep-feedback"
+										v-mask="'#####-###'"
 									></b-form-input>
 									<b-form-invalid-feedback id="input-cep-feedback">
-										<span v-if="!$v.form.cep.required">O campo "CEP" é obrigatório</span>
+										<span v-if="!$v.form.cep.required">O campo "CEP" é obrigatório</span>&nbsp;&nbsp;
+										<span v-if="!$v.form.cep.minLength">O campo "CEP" está incompleto</span>
 									</b-form-invalid-feedback>
 								</div>
 								<div class="col-2">
@@ -76,7 +80,8 @@
 										aria-describedby="input-numero-feedback"
 									></b-form-input>
 									<b-form-invalid-feedback id="input-numero-feedback">
-										<span v-if="!$v.form.numero.required">O campo "Número" é obrigatório</span>
+										<span v-if="!$v.form.numero.required">O campo "Número" é obrigatório</span>&nbsp;&nbsp;
+										<span v-if="!$v.form.numero.numeric">O campo "Número" não pode ter letras</span>
 									</b-form-invalid-feedback>
 								</div>
 							</div>
@@ -153,7 +158,7 @@ import Nav from "../../components/_nav/Nav";
 import { encryptText, decryptText } from "@/helpers/encrypt/encryptService";
 
 import { mapActions } from "vuex";
-import { required, minLength, helpers } from "vuelidate/lib/validators";
+import { required, minLength, helpers,numeric } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 
 export default {
@@ -180,11 +185,11 @@ export default {
 	validations: {
 		form: {
 			nomeCompleto: { required, minLength: minLength(3) },
-			cnpjcpf: { required },
+			cnpjcpf: { required,  minLength: minLength(14)  },
 			tipoPessoa: { required },
 			endereco: { required },
-			cep: { required },
-			numero: { required },
+			cep: { required, minLength: minLength(9)  },
+			numero: { required, numeric },
 			bairro: { required },
 			cidade: { required },
 			dataNascimento: { required }

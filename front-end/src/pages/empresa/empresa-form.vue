@@ -19,8 +19,7 @@
 									aria-describedby="input-nomeFantasia-feedback"
 								></b-form-input>
 								<b-form-invalid-feedback id="input-nomeFantasia-feedback">
-									<span v-if="!$v.form.nomeFantasia.required">O campo "Nome Fantasia" é obrigatório</span>
-									<br />
+									<span v-if="!$v.form.nomeFantasia.required">O campo "Nome Fantasia" é obrigatório</span>&nbsp;&nbsp;
 									<span
 										v-if="!$v.form.nomeFantasia.minLength"
 									>O campo "Nome Fantasia" não pode ter menos de 3 caracteres</span>
@@ -34,9 +33,11 @@
 									placeholder="Digite o CNPJ"
 									:state="validateState('cnpj')"
 									aria-describedby="input-cnpj-feedback"
+									v-mask="'##.###.###/####-##'"
 								></b-form-input>
 								<b-form-invalid-feedback id="input-cnpj-feedback">
 									<span v-if="!$v.form.cnpj.required">O campo "CNPJ" é obrigatório</span>
+									<span v-if="!$v.form.cnpj.minLength">O campo "CNPJ" está incompleto</span>
 								</b-form-invalid-feedback>
 							</b-form-group>
 
@@ -101,7 +102,7 @@ export default {
 	validations: {
 		form: {
 			nomeFantasia: { required, minLength: minLength(3) },
-			cnpj: { required },
+			cnpj: { required, minLength: minLength(18) },
 			razaoSocial: { required }
 		}
 	},
@@ -119,7 +120,7 @@ export default {
 			try {
 				let _empresa = {
 					nomeFantasia: this.form.nomeFantasia,
-					cnpj: this.form.cnpjcpf,
+					cnpj: this.form.cnpj,
 					razaoSocial: this.form.razaoSocial
 				};
 
@@ -180,5 +181,4 @@ export default {
 </script>
 
 <style>
-
 </style>

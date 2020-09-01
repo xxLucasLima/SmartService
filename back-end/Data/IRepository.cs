@@ -19,6 +19,8 @@ namespace back_end.Data
         Task<PerfilUsuario[]> GetAllPerfisUsuarioDDL();
         Task<Usuario> GetUsuarioAsyncById(int usuarioId);
         Task<Usuario> GetUsuarioAsyncByEmailAndPassword(string emailUsuario, string senhaUsuario);
+        Task<Usuario> GetUsuarioAsyncByEmail(string emailUsuario);
+
         #endregion
 
         #region Produto
@@ -39,9 +41,9 @@ namespace back_end.Data
         #region Cliente
 
         Task<Cliente[]> GetAllClientesAsync();
-        Task<Cliente> GetClienteAsyncById(int loteId);
+        Task<Cliente> GetClienteAsyncById(int clienteId);
         #endregion
-        
+
         #region Empresa
 
         Task<Empresa[]> GetAllEmpresasAsync();

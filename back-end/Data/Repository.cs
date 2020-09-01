@@ -73,6 +73,17 @@ namespace back_end.Data
 
             return await query.FirstOrDefaultAsync();
         }
+        public async Task<Usuario> GetUsuarioAsyncByEmail(string emailUsuario)
+        {
+            IQueryable<Usuario> query = _context.Usuario;
+
+            query = query.Include(p => p.Empresa);
+            query = query.Include(p => p.PerfilUsuario);
+
+            query = query.AsNoTracking().OrderBy(a => a.Id_Usuario).Where(usuario => usuario.Email == emailUsuario);
+
+            return await query.FirstOrDefaultAsync();
+        }
 
         public async Task<Empresa[]> GetAllEmpresasDDL()
         {
@@ -190,13 +201,14 @@ namespace back_end.Data
         }
 
         #endregion
-    
+
         #region Empresa
         public async Task<Empresa[]> GetAllEmpresasAsync()
         {
             IQueryable<Empresa> query = _context.Empresa;
 
             query = query.AsNoTracking().OrderBy(a => a.Id_Empresa);
+            query = query.Include(p => p.Usuarios).ThenInclude(p => p.PerfilUsuario);
 
             return await query.ToArrayAsync();
         }

@@ -74,6 +74,35 @@ namespace back_end.Controllers
             }
         }
 
+        [HttpGet("resetPassUsuario/{idUsuario}")]
+        public async Task<IActionResult> ResetPassUsuario(int idUsuario)
+        {
+            try
+            {
+                var usuario = await _repo.GetUsuarioAsyncById(Convert.ToInt32(idUsuario));
+
+                if (usuario == null)
+                    return NotFound();
+
+                usuario.Senha = null;
+
+                _repo.Update(usuario);
+
+                if (await _repo.SaveChangesAsync())
+                {
+                    usuario = await _repo.GetUsuarioAsyncById(Convert.ToInt32(idUsuario));
+                    return Created($"/api/usuario/{usuario.Id_Usuario}", usuario);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou: " + ex.Message);
+            }
+
+            return BadRequest();
+
+        }
+
 
         [HttpDelete("{idUsuario}")]
         public async Task<IActionResult> Delete(int idUsuario)

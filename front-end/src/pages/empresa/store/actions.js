@@ -23,5 +23,5 @@ export const ActionEditEmpresa = ({ commit }, payload) => {
 }
 
 export const ActionDeleteEmpresaById = ({ commit }, payload) => {
-    services.empresa.deleteEmpresaById({ idEmpresa: payload });
+    return services.empresa.deleteEmpresaById({ idEmpresa: payload });
 }

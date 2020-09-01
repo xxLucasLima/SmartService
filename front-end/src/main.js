@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from './store'
 import router from './routes'
 import './assets/scss/app.scss'
-
+import { VueMaskDirective } from "v-mask";
 
 import { BootstrapVue, IconsPlugin, ModalPlugin, ToastPlugin } from 'bootstrap-vue'
 
@@ -14,6 +14,7 @@ Vue.use(ToastPlugin)
 Vue.use(IconsPlugin)
 Vue.use(ModalPlugin)
 Vue.use(VueCryptojs)
+Vue.directive("mask", VueMaskDirective);
 
 Vue.config.productionTip = false
 

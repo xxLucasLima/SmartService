@@ -28,6 +28,9 @@ namespace back_end.Controllers
             {
                 model.DataCriacao = DateTime.Today;
 
+                //Definido 'True' por padrão, até regra de negócio for implementada 
+                model.Ativo = true;
+
                 _repo.Add(model);
 
                 if (await _repo.SaveChangesAsync())

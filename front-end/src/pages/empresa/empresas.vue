@@ -8,7 +8,7 @@
 				</div>
 				<br />
 				<b-row class="justify-content-md-center">
-					<b-col sm="4" md="auto"> 
+					<b-col sm="4" md="auto">
 						<label>Pesquise pelo CNPJ:</label>
 					</b-col>
 					<b-col sm="4">
@@ -22,7 +22,7 @@
 						></b-form-input>
 					</b-col>
 					<b-col sm="4" class="text-right">
-						<b-button :to="{ name: 'empresa-form' }" disabled class="buttonCriarNovo" size="sm">Criar Nova Empresa</b-button>
+						<b-button :to="{ name: 'empresa-form' }" class="buttonCriarNovo" size="sm">Criar Nova Empresa</b-button>
 					</b-col>
 				</b-row>
 				<br />
@@ -55,7 +55,10 @@
 								<strong>Loading...</strong>
 							</div>
 						</template>
-
+						<template v-slot:cell(cnpj)="row">
+							<input type="hidden" v-model="row.item.cnpj" />
+							{{row.item.cnpj}}
+						</template>
 						<template v-slot:cell(Detalhes)="row">
 							<div role="group">
 								<b-button
@@ -100,8 +103,67 @@
 						size="sm"
 					></b-pagination>
 				</div>
-				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-					<pre>{{ infoModal.content }}</pre>
+				<b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal" size="lg">
+					<b-card-group deck style="padding:10px">
+						<b-card header-tag="header">
+							<div class="row">
+								<div class="col-3">
+									<label>
+										<strong>Nome Fantasia:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.nomeFantasia"></b-form-input>
+								</div>
+
+								<div class="col-3">
+									<label>
+										<strong>Razão Social:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.razaoSocial"></b-form-input>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-3">
+									<label>
+										<strong>Data Criação:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input
+										size="sm"
+										disabled
+										v-model="infoModal.content.dataCriacao"
+										v-mask="'##/##/####'"
+									></b-form-input>
+								</div>
+
+								<div class="col-3">
+									<label>
+										<strong>CNPJ:</strong>
+									</label>
+								</div>
+								<div class="col-3">
+									<b-form-input size="sm" disabled v-model="infoModal.content.cnpj"></b-form-input>
+								</div>
+							</div>
+
+							<br />
+							<h3>Usuarios Associados:</h3>
+							<b-table
+								id="tableUsuariosModal"
+								empty-text="Não foi possível localizar registros de usuários desta Empresa"
+								primary-key="tipo"
+								:busy="busy"
+								:items="infoModal.content.usuarios"
+								show-empty
+								:fields="usuariosEmpresa"
+							></b-table>
+						</b-card>
+					</b-card-group>
 				</b-modal>
 			</b-container>
 		</div>
@@ -113,6 +175,7 @@
 import Nav from "../../components/_nav/Nav";
 import { mapActions, mapState } from "vuex";
 import { showConfirmMsg } from "../../helpers/messageBoxes/messageConfirm.js";
+import { parseDateToLocal } from "../../helpers/dateHandler/dateHandler";
 
 export default {
 	components: {
@@ -150,7 +213,30 @@ export default {
 				},
 				{
 					key: "Detalhes",
-                    label: " ",
+					label: " ",
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				}
+			],
+			usuariosEmpresa: [
+				{
+					key: "email",
+					label: "E-MAIL",
+					sortable: true,
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				},
+				{
+					key: "nome",
+					label: "NOME",
+					sortable: true,
+					tdClass: "tdTable",
+					thStyle: { minWidth: "180px", textAlign: "center" }
+				},
+				{
+					key: "perfilUsuario.nome",
+					label: "PERFIL ACESSO",
+					sortable: true,
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				}
@@ -164,30 +250,46 @@ export default {
 		]),
 		async excluirEmpresa(id_Empresa) {
 			try {
-				await this.ActionDeleteEmpresaById(id_Empresa);
-				this.ActionGetAllEmpresas();
+				await this.ActionDeleteEmpresaById(id_Empresa).then(() => {
+					this.showToastDeleteConfirmation();
+					this.ActionGetAllEmpresas();
+				});
 			} catch (err) {
-				window.alert("Ocorreu algum erro");
-				console.error(err);
+				this.showToastDeleteErro(err.body);
 			}
 		},
 		editarEmpresa(id_Empresa) {
 			try {
-					this.$router.push("empresa-form/" + id_Empresa);
+				this.$router.push("empresa-form/" + id_Empresa);
 			} catch (err) {
-				window.alert("Ocorreu algum erro");
-				console.error(err);
+				window.alert("Ocorreu algum erro: " + err);
 			}
 		},
 		info(item, index, button) {
-			this.infoModal.title = `Row index: ${index}`;
-			this.infoModal.content = JSON.stringify(item, null, 2);
+			this.infoModal.title = `Detalhes da empresa: ${item.nomeFantasia}`;
+			item.dataCriacao = parseDateToLocal(item.dataCriacao);
+			this.infoModal.content = item;
 
 			this.$bvModal.show(this.infoModal.id);
 		},
 		resetInfoModal() {
 			this.infoModal.title = "";
 			this.infoModal.content = "";
+		},
+		showToastDeleteConfirmation() {
+			this.$bvToast.toast("Empresa excluida com sucesso!", {
+				title: "Sucesso",
+				autoHideDelay: 5000,
+				variant: "success"
+			});
+		},
+
+		showToastDeleteErro(err) {
+			this.$bvToast.toast(`${err}`, {
+				title: "Erro ao Excluir Empresa!",
+				autoHideDelay: 5000,
+				variant: "danger"
+			});
 		}
 	},
 	mounted() {
@@ -205,7 +307,4 @@ export default {
 </script>
 
 <style>
-
-
-
 </style>

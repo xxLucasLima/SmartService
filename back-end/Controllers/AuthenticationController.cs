@@ -26,20 +26,45 @@ namespace back_end.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate(Usuario usuario)
         {
-            var model = await _repo.GetUsuarioAsyncByEmailAndPassword(usuario.Email, usuario.Senha);
+            var model = await _repo.GetUsuarioAsyncByEmail(usuario.Email);
 
-            if (model == null)
-                return new NotFoundObjectResult(new { message = "Usuário ou senha inválidos" });
-
-            var token = TokenService.GenerateToken(model);
-            model.Senha = "";
-            var p = new
+            if (model != null && model.Senha != null)
             {
-                usuario = model,
-                token = token
-            };
-            return p;
+                if (model == null || model.Senha != usuario.Senha)
+                    return new NotFoundObjectResult(new { message = "Usuário ou senha inválidos" });
 
+                var token = TokenService.GenerateToken(model);
+                model.Senha = "";
+                var p = new
+                {
+                    usuario = model,
+                    token = token
+                };
+                return p;
+
+            }
+            else
+            {
+                if (model == null)
+                    return new NotFoundObjectResult(new { message = "Usuário ou senha inválidos" });
+
+                model.Senha = usuario.Senha;
+                _repo.Update(model);
+
+                if (await _repo.SaveChangesAsync())
+                {
+                    var token = TokenService.GenerateToken(model);
+                    model.Senha = "";
+                    var p = new
+                    {
+                        usuario = model,
+                        token = token
+                    };
+                    return p;
+                }
+
+            }
+                return new NotFoundObjectResult(new { message = "Erro ao acessar com o este usuário" });
         }
 
         [HttpGet]

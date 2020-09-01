@@ -5,6 +5,7 @@ export default {
     deleteUsuarioById: { method: 'delete', url: 'http://localhost:8000/api/usuario{/idUsuario}' },
     getAllEmpresasDDL: { method: 'get', url: 'http://localhost:8000/api/usuario/getAllEmpresasDDL' },
     getAllPerfisUsuarioDDL: { method: 'get', url: 'http://localhost:8000/api/usuario/getAllPerfisUsuarioDDL' },
-    editUsuario: { method: 'put', url: 'http://localhost:8000/api/usuario{/idUsuario}' }
+    editUsuario: { method: 'put', url: 'http://localhost:8000/api/usuario{/idUsuario}' },
+    resetPassUsuario: { method: 'get', url: 'http://localhost:8000/api/usuario/resetPassUsuario{/idUsuario}' }
 
 }

@@ -27,5 +27,5 @@ export const ActionEditCliente = ({ commit }, payload) => {
 }
 
 export const ActionDeleteClienteById = ({ commit }, payload) => {
-    services.cliente.deleteClienteById({ idCliente: payload });
+    return services.cliente.deleteClienteById({ idCliente: payload });
 }

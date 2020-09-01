@@ -8,7 +8,7 @@
 				</div>
 				<br />
 				<b-row class="justify-content-md-center">
-					<b-col sm="4" md="auto"> 
+					<b-col sm="4" md="auto">
 						<label>Pesquise pelo CPF/CNPJ:</label>
 					</b-col>
 					<b-col sm="4">
@@ -22,7 +22,12 @@
 						></b-form-input>
 					</b-col>
 					<b-col sm="4" class="text-right">
-						<b-button :to="{ name: 'cliente-form' }" disabled class="buttonCriarNovo" size="sm">Criar Novo Cliente</b-button>
+						<b-button
+							:to="{ name: 'cliente-form' }"
+							disabled
+							class="buttonCriarNovo"
+							size="sm"
+						>Criar Novo Cliente</b-button>
 					</b-col>
 				</b-row>
 				<br />
@@ -164,7 +169,7 @@ export default {
 				},
 				{
 					key: "Detalhes",
-                    label: " ",
+					label: " ",
 					tdClass: "tdTable",
 					thStyle: { minWidth: "180px", textAlign: "center" }
 				}
@@ -179,11 +184,12 @@ export default {
 		]),
 		async excluirCliente(id_Cliente) {
 			try {
-				await this.ActionDeleteClienteById(id_Cliente);
-				this.ActionGetAllClientes();
+				await this.ActionDeleteClienteById(id_Cliente).then(() => {
+					this.showToastDeleteConfirmation();
+					this.ActionGetAllClientes();
+				});
 			} catch (err) {
-				window.alert("Ocorreu algum erro");
-				console.error(err);
+				this.showToastDeleteErro(err.body);
 			}
 		},
 		editarCliente(id_Cliente) {
@@ -193,8 +199,7 @@ export default {
 					this.$router.push("clientePJ-form/" + id_Cliente);
 				else this.$router.push("clientePF-form/" + id_Cliente);
 			} catch (err) {
-				window.alert("Ocorreu algum erro");
-				console.error(err);
+				window.alert("Ocorreu algum erro: " + err);
 			}
 		},
 		info(item, index, button) {
@@ -206,6 +211,21 @@ export default {
 		resetInfoModal() {
 			this.infoModal.title = "";
 			this.infoModal.content = "";
+		},
+		showToastDeleteConfirmation() {
+			this.$bvToast.toast("Cliente excluido com sucesso!", {
+				title: "Sucesso",
+				autoHideDelay: 5000,
+				variant: "success"
+			});
+		},
+
+		showToastDeleteErro(err) {
+			this.$bvToast.toast(`${err}`, {
+				title: "Erro ao Excluir Cliente!",
+				autoHideDelay: 5000,
+				variant: "danger"
+			});
 		}
 	},
 	mounted() {
@@ -223,7 +243,4 @@ export default {
 </script>
 
 <style>
-
-
-
 </style>

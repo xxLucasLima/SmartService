@@ -1,11 +1,13 @@
 using System;
+using System.Data;
 using System.Threading.Tasks;
 using back_end.Data;
 using back_end.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Controllers
 {
@@ -93,9 +95,13 @@ namespace back_end.Controllers
                     return Ok();
                 }
             }
-            catch (System.Exception)
+            catch (DbUpdateException )
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
+                return this.StatusCode(StatusCodes.Status403Forbidden, "Não é possível excluir Cliente. Favor verificar se há produtos atrelados a este cliente ");
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou: " + ex.Message);
             }
             return BadRequest();
 
